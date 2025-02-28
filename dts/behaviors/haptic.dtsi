@@ -1,5 +1,3 @@
-#include <dt-bindings/zmk/behaviors.h>
-
 / {
     behaviors {
         /omit-if-no-ref/ haptic: haptic {
