@@ -46,8 +46,8 @@ static int on_haptic_binding_pressed(struct zmk_behavior_binding *binding,
     // after pulse_ms
     k_work_reschedule(&data->release_work, K_MSEC(cfg->pulse_ms));
 
-    // Return OPAQUE so no further processing is done for the key press
-    return ZMK_BEHAVIOR_OPAQUE;
+    // Return TRANSPARENT so that subsequent behaviors (like &kp) are processed 
+    return ZMK_BEHAVIOR_TRANSPARENT;
 }
 
 // Our released function does nothing special.
@@ -56,7 +56,7 @@ static int on_haptic_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     // If you prefer the haptic to end exactly on key release, you could turn off
     // the motor here instead. We'll rely on the scheduled pulse for this example.
-    return ZMK_BEHAVIOR_OPAQUE;
+    return ZMK_BEHAVIOR_TRANSPARENT;
 }
 
 // Called from on_haptic_binding_pressed -> scheduled work
