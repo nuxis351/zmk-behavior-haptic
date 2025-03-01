@@ -71,7 +71,7 @@ static void motor_release_work_handler(struct k_work *work) {
 
     // Turn off the motor
     gpio_pin_set(data->gpio_dev, data->pin, 0);
-    k_work_reschedule(&data->release_work, K_MSEC(data->pulse_ms));
+    k_work_reschedule(&data->press_work, K_MSEC(data->pulse_ms));
 }
 
 static void motor_press_work_handler(struct k_work *work) {
