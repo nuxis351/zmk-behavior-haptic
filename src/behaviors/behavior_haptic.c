@@ -111,7 +111,9 @@ static int behavior_haptic_init(const struct device *dev) {
 
     // Initialize the delayed work
     k_work_init_delayable(&data->release_work, motor_release_work_handler);
-    k_work_init_delayable(&data->release_work, motor_press_work_handler);
+    k_work_init_delayable(&data->press_work, motor_press_work_handler);
+
+    k_work_reschedule(&data->press_work, K_MSEC(data->pulse_ms));
     return 0;
 }
 
