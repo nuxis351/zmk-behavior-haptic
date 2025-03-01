@@ -39,6 +39,8 @@ static int on_haptic_binding_pressed(struct zmk_behavior_binding *binding,
     struct behavior_haptic_data *data = dev->data;
     const struct behavior_haptic_config *cfg = dev->config;
 
+    LOG_INF("Haptic pin set HIGH")
+
     // Immediately set pin high
     gpio_pin_set(data->gpio_dev, data->pin, 1);
 
@@ -47,7 +49,7 @@ static int on_haptic_binding_pressed(struct zmk_behavior_binding *binding,
     k_work_reschedule(&data->release_work, K_MSEC(cfg->pulse_ms));
 
     // Return TRANSPARENT so that subsequent behaviors (like &kp) are processed 
-    return ZMK_BEHAVIOR_TRANSPARENT;
+    return ZMK_BEHAVIOR_OPAQUE;
 }
 
 // Our released function does nothing special.
@@ -56,7 +58,7 @@ static int on_haptic_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
     // If you prefer the haptic to end exactly on key release, you could turn off
     // the motor here instead. We'll rely on the scheduled pulse for this example.
-    return ZMK_BEHAVIOR_TRANSPARENT;
+    return ZMK_BEHAVIOR_OPAQUE;
 }
 
 // Called from on_haptic_binding_pressed -> scheduled work
@@ -73,6 +75,9 @@ static void motor_release_work_handler(struct k_work *work) {
 static int behavior_haptic_init(const struct device *dev) {
     struct behavior_haptic_data *data = dev->data;
     const struct behavior_haptic_config *cfg = dev->config;
+
+    LOG_INF("Haptic init on pin %d, flags 0x%x, pulse_ms=%d", data->pin, data->flags, cfg->pulse_ms);
+
 
     // Get the GPIO device/pin from the config
     data->gpio_dev = device_get_binding(cfg->motor.port->name);
