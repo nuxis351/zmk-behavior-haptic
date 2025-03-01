@@ -17,6 +17,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 // We'll keep a delayed work here so we can turn off the motor after a pulse.
 struct behavior_haptic_data {
     struct k_work_delayable release_work;
+    struct k_work_delayable press_work;
     const struct device *gpio_dev;
     gpio_pin_t pin;
     gpio_flags_t flags;
@@ -69,6 +70,17 @@ static void motor_release_work_handler(struct k_work *work) {
 
     // Turn off the motor
     gpio_pin_set(data->gpio_dev, data->pin, 0);
+    k_work_reschedule(&data->release_work, K_MSEC(data->pulse_ms));
+}
+
+static void motor_press_work_handler(struct k_work *work) {
+    // Convert from k_work back to our data pointer
+    struct k_work_delayable *dwork = CONTAINER_OF(work, struct k_work_delayable, work);
+    struct behavior_haptic_data *data = CONTAINER_OF(dwork, struct behavior_haptic_data, press_work);
+
+    // Turn off the motor
+    gpio_pin_set(data->gpio_dev, data->pin, 1);
+    k_work_reschedule(&data->release_work, K_MSEC(data->pulse_ms));
 }
 
 // Initialization function
@@ -83,6 +95,7 @@ static int behavior_haptic_init(const struct device *dev) {
     data->gpio_dev = device_get_binding(cfg->motor.port->name);
     data->pin = cfg->motor.pin;
     data->flags = cfg->motor.dt_flags;
+    data->pulse_ms = cfg->pulse_ms;
 
     if (!data->gpio_dev) {
         LOG_ERR("Failed to get haptic motor GPIO device");
@@ -98,7 +111,7 @@ static int behavior_haptic_init(const struct device *dev) {
 
     // Initialize the delayed work
     k_work_init_delayable(&data->release_work, motor_release_work_handler);
-
+    k_work_init_delayable(&data->release_work, motor_press_work_handler);
     return 0;
 }
 
