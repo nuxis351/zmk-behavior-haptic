@@ -21,6 +21,7 @@ struct behavior_haptic_data {
     const struct device *gpio_dev;
     gpio_pin_t pin;
     gpio_flags_t flags;
+    uint32_t pulse_ms;
 };
 
 // Config struct (properties from devicetree).
