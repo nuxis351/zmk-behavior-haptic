@@ -90,6 +90,7 @@ static int behavior_haptic_init(const struct device *dev) {
     }
 
     int ret = gpio_pin_configure(data->gpio_dev, data->pin, GPIO_OUTPUT_INACTIVE | data->flags);
+    LOG_INF("Haptic: gpio_pin_configure() returned %d", ret);
     if (ret < 0) {
         LOG_ERR("Failed to configure haptic motor GPIO pin");
         return ret;
