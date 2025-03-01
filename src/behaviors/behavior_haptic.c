@@ -125,7 +125,7 @@ BEHAVIOR_DT_INST_DEFINE(0,
                         NULL,
                         &behavior_haptic_data_0,
                         &behavior_haptic_config_0,
-                        APPLICATION,
+                        POST_KERNEL,
                         CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
                         &behavior_haptic_driver_api);
 
