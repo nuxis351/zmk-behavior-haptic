@@ -39,7 +39,7 @@ static int on_haptic_binding_pressed(struct zmk_behavior_binding *binding,
     struct behavior_haptic_data *data = dev->data;
     const struct behavior_haptic_config *cfg = dev->config;
 
-    LOG_INF("Haptic pin set HIGH")
+    LOG_INF("Haptic pin set HIGH");
 
     // Immediately set pin high
     gpio_pin_set(data->gpio_dev, data->pin, 1);
