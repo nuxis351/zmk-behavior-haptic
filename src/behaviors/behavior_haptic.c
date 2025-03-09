@@ -76,13 +76,12 @@ static int behavior_haptic_init(const struct device *dev) {
     struct behavior_haptic_data *data = dev->data;
     const struct behavior_haptic_config *cfg = dev->config;
 
-    LOG_INF("Haptic init on pin %d, flags 0x%x, pulse_ms=%d", data->pin, data->flags, cfg->pulse_ms);
-
-
-    // Get the GPIO device/pin from the config
+	 // Get the GPIO device/pin from the config
     data->gpio_dev = device_get_binding(cfg->motor.port->name);
     data->pin = cfg->motor.pin;
     data->flags = cfg->motor.dt_flags;
+
+    LOG_INF("Haptic init on pin %d, flags 0x%x, pulse_ms=%d", data->pin, data->flags, cfg->pulse_ms);
 
     if (!data->gpio_dev) {
         LOG_ERR("Failed to get haptic motor GPIO device");
