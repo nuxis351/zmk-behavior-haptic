@@ -66,7 +66,7 @@ static void motor_release_work_handler(struct k_work *work) {
     // Convert from k_work back to our data pointer
     struct k_work_delayable *dwork = CONTAINER_OF(work, struct k_work_delayable, work);
     struct behavior_haptic_data *data = CONTAINER_OF(dwork, struct behavior_haptic_data, release_work);
-
+	LOG_INF("Haptic pin set LOW");
     // Turn off the motor
     gpio_pin_set(data->gpio_dev, data->pin, 0);
 }
